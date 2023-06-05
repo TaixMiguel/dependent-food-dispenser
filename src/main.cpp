@@ -14,6 +14,5 @@ void loop() {
 
 // put function definitions here:
 int myFunction(int x, int y) {
-  esto no debería compilar
   return x + y;
 }
