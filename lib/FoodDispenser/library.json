@@ -1,0 +1,13 @@
+{
+    "$schema": "https://raw.githubusercontent.com/platformio/platformio-core/develop/platformio/assets/schema/library.json",
+    "name": "Dispensador de comida [CORE]",
+    "version": "0.0.0-dev",
+    "description": "Librería para manejar el control de un dispensador de comida",
+    "platforms": ["espressif32"],
+    "license": "GPL-3.0",
+    "frameworks": ["arduino"],
+    "authors": {
+            "name": "TaixMiguel",
+            "url": "https://github.com/TaixMiguel"
+        }
+  }
