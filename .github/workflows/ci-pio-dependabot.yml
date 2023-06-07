@@ -1,0 +1,17 @@
+name: PlatformIO Dependabot
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Ejecución cada viernes a las 00:00
+    - cron: '0 0 * * FRI'
+
+jobs:
+  dependabot:
+    runs-on: ubuntu-latest
+    name: Ejecución de PlatformIO Dependabot
+    steps:
+      - uses: actions/checkout@v3
+      - uses: peterus/platformio_dependabot@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
