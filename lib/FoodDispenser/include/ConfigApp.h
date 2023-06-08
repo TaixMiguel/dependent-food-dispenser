@@ -2,7 +2,6 @@
 #define ConfigApp_h
 
 #include <Preferences.h>
-#include <WiFi.h>
 
 /**
  * @author TaixMiguel
