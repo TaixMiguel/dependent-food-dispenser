@@ -3,11 +3,12 @@
 
 #include "ConfigApp.h"
 #include <Preferences.h>
+#include <WiFi.h>
 
 class ConfigTest: public ConfigApp {
 
   public:
-    ConfigTest(const char* appName = "appTest"): ConfigApp(appName) {}
+    ConfigTest(const char* appName): ConfigApp(appName) {}
 
     void saveBool(String key, bool value) {
       ConfigApp::saveBool(key, value);
@@ -98,6 +99,15 @@ void cleanPreferences() {
   preferences.end();
 }
 
+
+
+void test_wiFiConnected(void) {
+  ConfigApp config;
+  config.connectToWiFi();
+  delay(5000);
+  TEST_ASSERT_EQUAL_INT(WL_CONNECTED, WiFi.status());
+}
+
 void setup() {
   delay(2000);
 
@@ -107,6 +117,8 @@ void setup() {
   RUN_TEST(test_preferencesInt);
   RUN_TEST(test_preferencesLong);
   RUN_TEST(test_preferencesString);
+
+  RUN_TEST(test_wiFiConnected);
   UNITY_END();
 
   cleanPreferences();
