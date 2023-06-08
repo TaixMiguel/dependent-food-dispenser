@@ -1,18 +1,23 @@
 #include <Arduino.h>
 
-// put function declarations here:
-int myFunction(int, int);
+#include "ConfigApp.h"
+#include <WiFi.h>
+
+ConfigApp config;
+
+void wiFiStationDisconnected(WiFiEvent_t event, WiFiEventInfo_t info){
+  ESP_LOGD(config.appName, "Conexión WiFi perdida. Causa %s. Intentando re-conectar", info.wifi_sta_disconnected.reason);
+  config.connectToWiFi();
+}
 
 void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+  Serial.begin(115200);
+  config.connectToWiFi();
+  WiFi.onEvent(wiFiStationDisconnected, WiFiEvent_t::ARDUINO_EVENT_WIFI_STA_DISCONNECTED);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-}
-
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+  delay(2500);
+  Serial.println(WiFi.status());
 }

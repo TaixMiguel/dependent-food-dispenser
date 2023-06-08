@@ -2,6 +2,7 @@
 #define ConfigApp_h
 
 #include <Preferences.h>
+#include <WiFi.h>
 
 /**
  * @author TaixMiguel
@@ -10,6 +11,9 @@ class ConfigApp {
 
   public:
     ConfigApp(const char* appName="autdisp");
+    const char* appName;
+
+    void connectToWiFi();
 
   protected:
     virtual bool getBool(String key, bool valueDefault=false);
@@ -26,7 +30,6 @@ class ConfigApp {
 
   private:
     Preferences preferences;
-    const char* appName;
 };
 
 #endif
