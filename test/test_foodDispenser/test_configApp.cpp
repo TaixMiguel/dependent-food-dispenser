@@ -4,60 +4,94 @@
 #include "ConfigApp.h"
 #include <Preferences.h>
 
+class ConfigTest: public ConfigApp {
+
+  public:
+    ConfigTest(const char* appName = "appTest"): ConfigApp(appName) {}
+
+    void saveBool(String key, bool value) {
+      ConfigApp::saveBool(key, value);
+    }
+    bool getBool(String key, bool valueDefault=false) {
+      return ConfigApp::getBool(key, valueDefault);
+    }
+    float getFloat(String key, float valueDefault=-1) {
+      return ConfigApp::getFloat(key, valueDefault);
+    }
+    void saveFloat(String key, float value) {
+      ConfigApp::saveFloat(key, value);
+    }
+    int getInt(String key, int valueDefault=-1) {
+      return ConfigApp::getInt(key, valueDefault);
+    }
+    void saveInt(String key, int value) {
+      ConfigApp::saveInt(key, value);
+    }
+    long getLong(String key, long valueDefault=-1) {
+      return ConfigApp::getLong(key, valueDefault);
+    }
+    void saveLong(String key, long value) {
+      ConfigApp::saveLong(key, value);
+    }
+    String getString(String key, String valueDefault="") {
+      return ConfigApp::getString(key, valueDefault);
+    }
+    void saveString(String key, String value) {
+      ConfigApp::saveString(key, value);
+    }
+};
+
 const char* appName = "appTest";
-ConfigApp configApp(appName);
+ConfigTest config(appName);
 Preferences preferences;
+
 
 void setUp(void) {}
 
 void tearDown(void) {}
 
 void test_preferencesBool(void) {
-  TEST_ASSERT_TRUE(configApp.getBool("SWTEST_TRUE"));
-  TEST_ASSERT_FALSE(configApp.getBool("SWTEST_FALSE"));
+  config.saveBool("SWTEST_TRUE", true);
+  config.saveBool("SWTEST_FALSE", false);
+  TEST_ASSERT_TRUE(config.getBool("SWTEST_TRUE"));
+  TEST_ASSERT_FALSE(config.getBool("SWTEST_FALSE"));
 
-  TEST_ASSERT_FALSE(configApp.getBool("SW_NOT_EXISTS"));
-  TEST_ASSERT_TRUE(configApp.getBool("SW_NOT_EXISTS", true));
+  TEST_ASSERT_FALSE(config.getBool("SW_NOT_EXISTS"));
+  TEST_ASSERT_TRUE(config.getBool("SW_NOT_EXISTS", true));
 }
 
 void test_preferencesFloat(void) {
-  TEST_ASSERT_EQUAL_FLOAT(configApp.getFloat("FLOAT_NUMBER"), 35.25);
+  config.saveFloat("FLOAT_NUMBER", 35.25);
+  TEST_ASSERT_EQUAL_FLOAT(config.getFloat("FLOAT_NUMBER"), 35.25);
 
-  TEST_ASSERT_EQUAL_FLOAT(configApp.getFloat("FLOAT_NUMBER_NOT_EXISTS"), -1);
-  TEST_ASSERT_EQUAL_FLOAT(configApp.getFloat("FLOAT_NUMBER_NOT_EXISTS", 20.15), 20.15);
+  TEST_ASSERT_EQUAL_FLOAT(config.getFloat("FLOAT_NUMBER_NOT_EXISTS"), -1);
+  TEST_ASSERT_EQUAL_FLOAT(config.getFloat("FLOAT_NUMBER_NOT_EXISTS", 20.15), 20.15);
 }
 
 void test_preferencesInt(void) {
-  TEST_ASSERT_EQUAL_INT(configApp.getInt("INT_NUMBER"), 35);
+  config.saveInt("INT_NUMBER", 35);
+  TEST_ASSERT_EQUAL_INT(config.getInt("INT_NUMBER"), 35);
 
-  TEST_ASSERT_EQUAL_INT(configApp.getInt("INT_NUMBER_NOT_EXISTS"), -1);
-  TEST_ASSERT_EQUAL_INT(configApp.getInt("INT_NUMBER_NOT_EXISTS", 20), 20);
+  TEST_ASSERT_EQUAL_INT(config.getInt("INT_NUMBER_NOT_EXISTS"), -1);
+  TEST_ASSERT_EQUAL_INT(config.getInt("INT_NUMBER_NOT_EXISTS", 20), 20);
 }
 
 void test_preferencesLong(void) {
-  TEST_ASSERT_EQUAL_INT(configApp.getLong("LONG_NUMBER"), 456789123);
+  config.saveLong("LONG_NUMBER", 456789123);
+  TEST_ASSERT_EQUAL_INT(config.getLong("LONG_NUMBER"), 456789123);
 
-  TEST_ASSERT_EQUAL_INT(configApp.getLong("LONG_NUMBER_NOT_EXISTS"), -1);
-  TEST_ASSERT_EQUAL_INT(configApp.getLong("LONG_NUMBER_NOT_EXISTS", 789789456), 789789456);
+  TEST_ASSERT_EQUAL_INT(config.getLong("LONG_NUMBER_NOT_EXISTS"), -1);
+  TEST_ASSERT_EQUAL_INT(config.getLong("LONG_NUMBER_NOT_EXISTS", 789789456), 789789456);
 }
 
 void test_preferencesString(void) {
-  TEST_ASSERT_EQUAL_STRING(configApp.getString("STRING").c_str(), "TEXT string");
+  config.saveString("STRING", "TEXT string");
+  TEST_ASSERT_EQUAL_STRING(config.getString("STRING").c_str(), "TEXT string");
 
-  TEST_ASSERT_EQUAL_STRING(configApp.getString("STRING_NOT_EXISTS").c_str(), "");
-  TEST_ASSERT_EQUAL_STRING(configApp.getString("STRING_NOT_EXISTS", "NoT exists").c_str(), "NoT exists");
+  TEST_ASSERT_EQUAL_STRING(config.getString("STRING_NOT_EXISTS").c_str(), "");
+  TEST_ASSERT_EQUAL_STRING(config.getString("STRING_NOT_EXISTS", "NoT exists").c_str(), "NoT exists");
 }
 
-void setPreferencesDefault() {
-  preferences.begin(appName, false);
-  preferences.putBool("SWTEST_TRUE", true);
-  preferences.putBool("SWTEST_FALSE", false);
-  preferences.putFloat("FLOAT_NUMBER", 35.25);
-  preferences.putInt("INT_NUMBER", 35);
-  preferences.putLong("LONG_NUMBER", 456789123);
-  preferences.putString("STRING", "TEXT string");
-  preferences.end();
-}
 void cleanPreferences() {
   preferences.begin(appName, false);
   preferences.clear();
@@ -66,8 +100,6 @@ void cleanPreferences() {
 
 void setup() {
   delay(2000);
-
-  setPreferencesDefault();
 
   UNITY_BEGIN();
   RUN_TEST(test_preferencesBool);
