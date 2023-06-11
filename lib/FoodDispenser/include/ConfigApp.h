@@ -14,6 +14,7 @@ class ConfigApp {
     const char* appName;
 
     void connectToWiFi();
+    bool isWiFiConnected();
 
   protected:
     virtual bool getBool(String key, bool valueDefault=false);
