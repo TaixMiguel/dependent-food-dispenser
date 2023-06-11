@@ -3,6 +3,9 @@
     "name": "Dispensador de comida [CORE]",
     "version": "0.0.0-dev",
     "description": "Librería para manejar el control de un dispensador de comida",
+    "dependencies": {
+        "external-repo": "https://github.com/TaixMiguel/TaixArduTime#0.1.1"
+    },
     "platforms": ["espressif32"],
     "license": "GPL-3.0",
     "frameworks": ["arduino"],
