@@ -16,8 +16,11 @@ class Config: public ConfigApp {
     void connectToMQTT(MQTTClient& client, WiFiClient& espClient);
     bool isEnabledMQTT();
 
+    String idDevice();
+
   private:
     bool swEnabledMQTT = false;
+    String deviceID;
 };
 
 #if !defined(NO_GLOBAL_INSTANCES) && !defined(NO_GLOBAL_CFGHANDLER)

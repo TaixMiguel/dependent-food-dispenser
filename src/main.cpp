@@ -25,4 +25,5 @@ void loop() {
   toolMQTT.loop();
   Serial.println(WiFi.status());
   Serial.println(toolMQTT.isConnected());
+  Serial.println(cfg.idDevice());
 }
