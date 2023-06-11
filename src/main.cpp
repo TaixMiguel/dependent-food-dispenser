@@ -1,12 +1,15 @@
 #include <Arduino.h>
 
 #include "Config.h"
+#include "ToolFoodDispenser.h"
 #include "ToolMQTT.h"
 #include <WiFi.h>
 
+ToolFoodDispenser toolDispenser;
 ToolMQTT toolMQTT;
 
 void wiFiStationConnected(WiFiEvent_t event, WiFiEventInfo_t info) {
+  toolDispenser.updateTime();
   toolMQTT.connect();
   // toolMQTT.publish("status");
 }
