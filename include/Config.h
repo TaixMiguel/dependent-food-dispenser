@@ -17,9 +17,14 @@ class Config: public ConfigApp {
     bool isEnabledMQTT();
 
     String idDevice();
+    bool isReceivedDataMQTT();
+    void setReceivedMQTT(bool swReceivedData);
+    void setDurationNextEat(long durationNextEat);
+    void setTimestampNextEat(long timestampNextEat);
 
   private:
-    bool swEnabledMQTT = false;
+    bool swEnabledMQTT, swReceivedDataMQTT;
+    long durationNextEat, timestampNextEat;
     String deviceID;
 };
 

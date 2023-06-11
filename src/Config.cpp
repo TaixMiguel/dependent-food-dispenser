@@ -1,6 +1,9 @@
 #include "Config.h"
 
-Config::Config(const char* appName): ConfigApp(appName) {}
+Config::Config(const char* appName): ConfigApp(appName) {
+  swReceivedDataMQTT = true;
+  swEnabledMQTT = false;
+}
 
 void Config::connectToMQTT(MQTTClient& client, WiFiClient& espClient) {
   if (!isWiFiConnected()) {
@@ -36,6 +39,19 @@ String Config::idDevice() {
     deviceID.toLowerCase();
   }
   return deviceID;
+}
+
+bool Config::isReceivedDataMQTT() {
+  return swReceivedDataMQTT;
+}
+void Config::setReceivedMQTT(bool swReceivedData) {
+  swReceivedDataMQTT = swReceivedData;
+}
+void Config::setDurationNextEat(long durationNextEat) {
+  this->durationNextEat = durationNextEat;
+}
+void Config::setTimestampNextEat(long timestampNextEat) {
+  this->timestampNextEat = timestampNextEat;
 }
 
 
