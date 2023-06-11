@@ -9,6 +9,9 @@ void ConfigApp::connectToWiFi() {
   WiFi.begin(getString("wifi_ssid"), getString("wifi_pass"));
   ESP_LOGD(appName, "Conectando a la red WiFi %s.", getString("wifi_ssid"));
 }
+bool ConfigApp::isWiFiConnected() {
+  return WiFi.status() == WL_CONNECTED;
+}
 
 bool ConfigApp::getBool(String key, bool value) {
   preferences.begin(appName, true);
