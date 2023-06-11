@@ -26,6 +26,19 @@ bool Config::isEnabledMQTT() {
   return swEnabledMQTT;
 }
 
+String Config::idDevice() {
+  if (deviceID.isEmpty()) {
+    uint8_t baseMac[6];
+    char baseMacChr[13] = {0};
+    esp_read_mac(baseMac, ESP_MAC_WIFI_STA);
+    sprintf(baseMacChr, "%02X%02X%02X%02X%02X%02X", baseMac[1], baseMac[3], baseMac[5], baseMac[4], baseMac[2], baseMac[0]);
+    deviceID = String(baseMacChr);
+    deviceID.toLowerCase();
+  }
+  return deviceID;
+}
+
+
 #if !defined(NO_GLOBAL_INSTANCES) && !defined(NO_GLOBAL_CFGHANDLER)
   Config cfg;
 #endif
