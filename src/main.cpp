@@ -7,6 +7,7 @@
 
 ToolFoodDispenser toolDispenser;
 ToolMQTT toolMQTT;
+int count = 0;
 
 void wiFiStationConnected(WiFiEvent_t event, WiFiEventInfo_t info) {
   toolDispenser.updateTime();
@@ -15,8 +16,11 @@ void wiFiStationConnected(WiFiEvent_t event, WiFiEventInfo_t info) {
 }
 void wiFiStationDisconnected(WiFiEvent_t event, WiFiEventInfo_t info) {
   ESP_LOGD(cfg.appName, "Conexión WiFi perdida. Causa %s. Intentando re-conectar", info.wifi_sta_disconnected.reason);
+  toolMQTT.disconnect();
   cfg.connectToWiFi();
 }
+
+long getTimeToNextEat();
 
 void setup() {
   Serial.begin(115200);
@@ -29,6 +33,28 @@ void loop() {
   // put your main code here, to run repeatedly:
   delay(2500);
   toolMQTT.loop();
+  Serial.println(getTimeToNextEat());
   Serial.println(WiFi.status());
   Serial.println(toolMQTT.isConnected());
+
+  if (cfg.getTimestampNextEat() > 0) {
+    long timeToEat = getTimeToNextEat();
+    if (timeToEat < 0) {
+      // TODO
+    } else
+      toolDispenser.launchSleepMode(timeToEat);
+  }
+
+  if (count++ > 10) ESP.restart();
+}
+
+long getTimeToNextEat() {
+  time_t now;
+  struct tm timeinfo;
+  if (!getLocalTime(&timeinfo)) {
+    ESP_LOGE(cfg.appName, "Error al obtener la hora");
+    return(1000);
+  }
+  time(&now);
+  return cfg.getTimestampNextEat() - now;
 }

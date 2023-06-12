@@ -20,6 +20,7 @@ class Config: public ConfigApp {
     bool isReceivedDataMQTT();
     void setReceivedMQTT(bool swReceivedData);
     void setDurationNextEat(long durationNextEat);
+    long getTimestampNextEat();
     void setTimestampNextEat(long timestampNextEat);
 
   private:

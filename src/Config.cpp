@@ -50,6 +50,9 @@ void Config::setReceivedMQTT(bool swReceivedData) {
 void Config::setDurationNextEat(long durationNextEat) {
   this->durationNextEat = durationNextEat;
 }
+long Config::getTimestampNextEat() {
+  return timestampNextEat;
+}
 void Config::setTimestampNextEat(long timestampNextEat) {
   this->timestampNextEat = timestampNextEat;
 }
