@@ -4,6 +4,8 @@
 #include "ConfigApp.h"
 #include <taixArduTime.hpp>
 
+#define FACTOR_MICRO_SECONDS 1000000
+
 /**
  * @author TaixMiguel
  */
@@ -13,6 +15,11 @@ class ToolFoodDispenser {
     ToolFoodDispenser();
 
     void updateTime();
+    void externalShutdown();
+    void launchSleepMode(long timeSleep, long timeExternalSleep=0);
+
+  private:
+    ConfigApp config;
 };
 
 #endif
