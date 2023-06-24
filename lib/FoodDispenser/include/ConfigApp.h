@@ -18,6 +18,7 @@ class ConfigApp {
 
     bool isBatteryEnabled();
     uint8_t getBatteryPin();
+    uint8_t getDispenserMotorPin();
 
   protected:
     virtual bool getBool(String key, bool valueDefault=false);

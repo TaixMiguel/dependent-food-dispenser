@@ -47,6 +47,9 @@ bool Config::isReceivedDataMQTT() {
 void Config::setReceivedMQTT(bool swReceivedData) {
   swReceivedDataMQTT = swReceivedData;
 }
+long Config::getDurationNextEat() {
+  return durationNextEat;
+}
 void Config::setDurationNextEat(long durationNextEat) {
   this->durationNextEat = durationNextEat;
 }
