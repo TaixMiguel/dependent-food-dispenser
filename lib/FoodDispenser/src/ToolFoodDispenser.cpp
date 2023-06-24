@@ -10,6 +10,14 @@ void ToolFoodDispenser::updateTime() {
   }
 }
 
+void ToolFoodDispenser::launcherFood(uint8_t pin, int dispenseTime) {
+  ESP_LOGD(config.appName, "Se va a dar comida durante %i segundos", dispenseTime/1000);
+  digitalWrite(pin, HIGH);
+  delay(dispenseTime);
+  digitalWrite(pin, LOW);
+  ESP_LOGI(config.appName, "Se ha dispensado comida durante %i segundos", dispenseTime/1000);
+}
+
 float ToolFoodDispenser::getBatteryLevel(uint8_t pin) {
   return map(analogRead(pin), 0.0f, 4095.0f, 0, 100);
 }

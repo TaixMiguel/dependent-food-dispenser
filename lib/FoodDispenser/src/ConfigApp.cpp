@@ -19,6 +19,9 @@ bool ConfigApp::isBatteryEnabled() {
 uint8_t ConfigApp::getBatteryPin() {
   return getInt("pin_battery");
 }
+uint8_t ConfigApp::getDispenserMotorPin() {
+  return getInt("pin_dispenser_motor");
+}
 
 bool ConfigApp::getBool(String key, bool value) {
   preferences.begin(appName, true);

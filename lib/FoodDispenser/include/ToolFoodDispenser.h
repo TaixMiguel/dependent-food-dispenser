@@ -16,6 +16,7 @@ class ToolFoodDispenser {
 
     void updateTime();
 
+    void launcherFood(uint8_t pin, int dispenseTime);
     float getBatteryLevel(uint8_t pin);
 
     void externalShutdown();

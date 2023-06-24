@@ -19,6 +19,7 @@ class Config: public ConfigApp {
     String idDevice();
     bool isReceivedDataMQTT();
     void setReceivedMQTT(bool swReceivedData);
+    long getDurationNextEat();
     void setDurationNextEat(long durationNextEat);
     long getTimestampNextEat();
     void setTimestampNextEat(long timestampNextEat);
