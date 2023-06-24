@@ -26,6 +26,7 @@ void wiFiStationDisconnected(WiFiEvent_t event, WiFiEventInfo_t info) {
 
 void setupDispenserMotor();
 long getTimeToNextEat();
+long getTimestampNow();
 void setupBattery();
 
 void setup() {
@@ -39,27 +40,35 @@ void setup() {
 }
 
 void loop() {
-  // TODO: tener en cuenta el valor de swMotor
-  if (swBattery) batteryLevel += toolDispenser.getBatteryLevel(pinBattery);
-  // put your main code here, to run repeatedly:
-  delay(2500);
-  toolMQTT.loop();
-  Serial.println(getTimeToNextEat());
-  Serial.println(WiFi.status());
-  Serial.println(toolMQTT.isConnected());
+  if (swMotor) {
+    delay(2500);
+    toolMQTT.loop();
+    if (swBattery) batteryLevel += toolDispenser.getBatteryLevel(pinBattery);
 
-  if (cfg.getTimestampNextEat() > 0) {
-    long timeToEat = getTimeToNextEat();
-    if (timeToEat <= 0) {
-      toolDispenser.launcherFood(pinDispenserMotor, cfg.getDurationNextEat());
-    } else
-      toolDispenser.launchSleepMode(timeToEat);
-  }
+    if (cfg.getTimestampNextEat() > 0) {
+      long timeToEat = getTimeToNextEat();
+      Serial.printf("Tiempo para comer: %i\n", timeToEat);
+      if (timeToEat <= 0) {
+        toolDispenser.launcherFood(pinDispenserMotor, cfg.getDurationNextEat());
+        cfg.setTimestampNextEat(getTimestampNow() + 600); // Se suma 10 minutos
+        cfg.setReceivedMQTT(true);
+      } else if (timeToEat <= 10) {
+        // Condición para 10 segundos
+        delay((timeToEat * 1000) - 2500);
+      } else
+        toolDispenser.launchSleepMode(timeToEat);
+    }
 
-  if (count++ > 10) ESP.restart();
+    if (count++ > 10) ESP.restart();
+  } else ESP.restart();
+
+  // TODO: cuando se actualice automáticamente se tiene que quitar el reinicio cuando no hay motor
 }
 
 long getTimeToNextEat() {
+  return cfg.getTimestampNextEat() - getTimestampNow();
+}
+long getTimestampNow() {
   time_t now;
   struct tm timeinfo;
   if (!getLocalTime(&timeinfo)) {
@@ -67,7 +76,7 @@ long getTimeToNextEat() {
     return(1000);
   }
   time(&now);
-  return cfg.getTimestampNextEat() - now;
+  return now;
 }
 
 void setupDispenserMotor() {
