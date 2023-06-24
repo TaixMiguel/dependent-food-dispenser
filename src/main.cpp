@@ -6,8 +6,12 @@
 #include <WiFi.h>
 
 ToolFoodDispenser toolDispenser;
+float batteryLevel = 0;
 ToolMQTT toolMQTT;
-int count = 0;
+int count = 1;
+
+uint8_t pinBattery;
+bool swBattery;
 
 void wiFiStationConnected(WiFiEvent_t event, WiFiEventInfo_t info) {
   toolDispenser.updateTime();
@@ -21,15 +25,19 @@ void wiFiStationDisconnected(WiFiEvent_t event, WiFiEventInfo_t info) {
 }
 
 long getTimeToNextEat();
+void setupBattery();
 
 void setup() {
   Serial.begin(115200);
   WiFi.onEvent(wiFiStationConnected, WiFiEvent_t::ARDUINO_EVENT_WIFI_STA_GOT_IP);
   WiFi.onEvent(wiFiStationDisconnected, WiFiEvent_t::ARDUINO_EVENT_WIFI_STA_DISCONNECTED);
   cfg.connectToWiFi();
+
+  setupBattery();
 }
 
 void loop() {
+  if (swBattery) batteryLevel += toolDispenser.getBatteryLevel(pinBattery);
   // put your main code here, to run repeatedly:
   delay(2500);
   toolMQTT.loop();
@@ -57,4 +65,14 @@ long getTimeToNextEat() {
   }
   time(&now);
   return cfg.getTimestampNextEat() - now;
+}
+
+void setupBattery() {
+  swBattery = cfg.isBatteryEnabled();
+  if (swBattery) {
+    pinBattery = cfg.getBatteryPin();
+    if (pinBattery > 0) pinMode(pinBattery, INPUT);
+    else swBattery = false;
+  }
+  ESP_LOGD(cfg.appName, "%s => %i", swBattery ? "Batería habilitada" : "Batería no habilitada", pinBattery);
 }

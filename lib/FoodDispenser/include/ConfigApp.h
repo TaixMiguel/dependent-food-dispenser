@@ -16,6 +16,9 @@ class ConfigApp {
     void connectToWiFi();
     bool isWiFiConnected();
 
+    bool isBatteryEnabled();
+    uint8_t getBatteryPin();
+
   protected:
     virtual bool getBool(String key, bool valueDefault=false);
     virtual float getFloat(String key, float valueDefault=-1);

@@ -10,6 +10,10 @@ void ToolFoodDispenser::updateTime() {
   }
 }
 
+float ToolFoodDispenser::getBatteryLevel(uint8_t pin) {
+  return map(analogRead(pin), 0.0f, 4095.0f, 0, 100);
+}
+
 void ToolFoodDispenser::externalShutdown() {
   // TODO
 }

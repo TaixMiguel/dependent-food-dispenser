@@ -6,11 +6,18 @@ ConfigApp::ConfigApp(const char* appName) {
 
 void ConfigApp::connectToWiFi() {
   WiFi.mode(WIFI_STA);
-  WiFi.begin(getString("wifi_ssid"), getString("wifi_pass"));
+  WiFi.begin(getString("wifi_ssid").c_str(), getString("wifi_pass").c_str());
   ESP_LOGD(appName, "Conectando a la red WiFi %s.", getString("wifi_ssid"));
 }
 bool ConfigApp::isWiFiConnected() {
   return WiFi.status() == WL_CONNECTED;
+}
+
+bool ConfigApp::isBatteryEnabled() {
+  return getBool("sw_battery");
+}
+uint8_t ConfigApp::getBatteryPin() {
+  return getInt("pin_battery");
 }
 
 bool ConfigApp::getBool(String key, bool value) {
