@@ -15,6 +15,9 @@ class ToolFoodDispenser {
     ToolFoodDispenser();
 
     void updateTime();
+
+    float getBatteryLevel(uint8_t pin);
+
     void externalShutdown();
     void launchSleepMode(long timeSleep, long timeExternalSleep=0);
 

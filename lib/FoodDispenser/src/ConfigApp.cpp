@@ -13,6 +13,13 @@ bool ConfigApp::isWiFiConnected() {
   return WiFi.status() == WL_CONNECTED;
 }
 
+bool ConfigApp::isBatteryEnabled() {
+  return getBool("sw_battery");
+}
+uint8_t ConfigApp::getBatteryPin() {
+  return getInt("pin_battery");
+}
+
 bool ConfigApp::getBool(String key, bool value) {
   preferences.begin(appName, true);
   value = preferences.getBool(key.c_str(), value);
