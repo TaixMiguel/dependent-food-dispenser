@@ -37,8 +37,13 @@ jobs:
           aVersion=(${version//./ })
           echo "releaseVersion=${aVersion[0]}.${aVersion[1]}.$((aVersion[2] + 1))" >> $GITHUB_ENV
 
-      - name: Pintar la versión
-        run: echo "$version y $releaseVersion"
-
       - name: Replace release version to platformio.ini
         run: sed -i -e "s/appVersion = $version/appVersion = $releaseVersion/g" platformio.ini
+
+      - name: Create tag to release
+        uses: rickstaa/action-create-tag@v1
+        with:
+          tag: ${{env.releaseVersion}}
+
+      - name: Pintar la versión
+        run: echo "$version y $releaseVersion"
