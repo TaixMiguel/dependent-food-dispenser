@@ -22,6 +22,7 @@ jobs:
 
       - run: |
           versionActual=$(awk '/appVersion = /{print$3}' platformio.ini)
+          versionActual=${versionActual/-SNAPSHOT/}
           echo "version=$versionActual" >> $GITHUB_ENV
 
       - if: github.event.inputs.releaseType == 'release'
@@ -37,3 +38,6 @@ jobs:
 
       - name: Pintar la versión
         run: echo ${{env.releaseVersion}}
+
+      - name: Replace release version to platformio.ini
+        run: sed -i -e "s/appVersion = $version/appVersion = $releaseVersion/g" platformio.ini
