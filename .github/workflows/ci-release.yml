@@ -29,13 +29,13 @@ jobs:
         name: Get new release version
         run: |
           aVersion=(${version//./ })
-          echo ${aVersion[1]}+1
-          echo "$((aVersion[1] + 1))"
-          echo "releaseVersion=${aVersion[0]}.1.0" >> $GITHUB_ENV
+          echo "releaseVersion=${aVersion[0]}.$((aVersion[1] + 1)).0" >> $GITHUB_ENV
 
       - if: github.event.inputs.releaseType == 'fix'
         name: Get new release fix version
-        run: echo "releaseVersion=0.0.1" >> $GITHUB_ENV
+        run: |
+          aVersion=(${version//./ })
+          echo "releaseVersion=${aVersion[0]}.${aVersion[1]}.$((aVersion[2] + 1))" >> $GITHUB_ENV
 
       - name: Pintar la versión
         run: echo "$version y $releaseVersion"
