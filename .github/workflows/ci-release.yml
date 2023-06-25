@@ -27,7 +27,10 @@ jobs:
 
       - if: github.event.inputs.releaseType == 'release'
         name: Get new release version
-        run: echo "releaseVersion=0.1.0" >> $GITHUB_ENV
+        run: |
+          mails=$(echo $version | tr ".")
+          echo $mails
+          echo "releaseVersion=0.1.0" >> $GITHUB_ENV
 
       - if: github.event.inputs.releaseType == 'fix'
         name: Get new release fix version
@@ -35,9 +38,6 @@ jobs:
 
       - name: Pintar la versión
         run: echo "$version y $releaseVersion"
-
-      - name: Pintar la versión
-        run: echo ${{env.releaseVersion}}
 
       - name: Replace release version to platformio.ini
         run: sed -i -e "s/appVersion = $version/appVersion = $releaseVersion/g" platformio.ini
