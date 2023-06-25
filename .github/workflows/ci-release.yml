@@ -1,0 +1,29 @@
+name: Release creation
+
+on: 
+  workflow_dispatch:
+    inputs:
+      releaseType:
+        description: 'Tipo de release'
+        default: 'release'
+        required: true
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: 'true'
+      
+      - if: github.event.inputs.releaseType == 'release'
+        name: Get new release version
+        run: echo "releaseVersion=0.1.0" >> $GITHUB_OUTPUT
+      
+      - if: github.event.inputs.releaseType == 'fix'
+        name: Get new release fix version
+        run: echo "releaseVersion=0.0.1" >> $GITHUB_OUTPUT
+      
+      - name: Pintar la versión
+        run: echo "${{ steps.vars.outputs.releaseVersion }}"
