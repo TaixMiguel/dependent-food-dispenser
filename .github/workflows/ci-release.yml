@@ -30,6 +30,7 @@ jobs:
         run: |
           aVersion=(${version//./ })
           echo ${aVersion[1]}+1
+          echo "$((aVersion[1] + 1))"
           echo "releaseVersion=${aVersion[0]}.1.0" >> $GITHUB_ENV
 
       - if: github.event.inputs.releaseType == 'fix'
