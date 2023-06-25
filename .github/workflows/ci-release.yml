@@ -20,7 +20,9 @@ jobs:
         with:
           submodules: 'true'
 
-      - run: echo "version=$(awk '/appVersion = /{print$3}' platformio.ini)" >> $GITHUB_ENV
+      - run: |
+          versionActual=$(awk '/appVersion = /{print$3}' platformio.ini)
+          echo "version=$versionActual" >> $GITHUB_ENV
 
       - if: github.event.inputs.releaseType == 'release'
         name: Get new release version
