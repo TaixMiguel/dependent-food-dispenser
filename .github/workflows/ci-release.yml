@@ -29,3 +29,6 @@ jobs:
       
       - name: Pintar la versión
         run: echo "$releaseVersion"
+      
+      - name: Pintar la versión 2
+        run: echo ${{env.releaseVersion}}
