@@ -5,6 +5,7 @@
 #include "ToolMQTT.h"
 #include <WiFi.h>
 
+StaticJsonDocument<200> jsonOutput;
 ToolFoodDispenser toolDispenser;
 float batteryLevel = 0;
 ToolMQTT toolMQTT;
@@ -47,16 +48,24 @@ void loop() {
 
     if (cfg.getTimestampNextEat() > 0) {
       long timeToEat = getTimeToNextEat();
-      Serial.printf("Tiempo para comer: %i\n", timeToEat);
       if (timeToEat <= 0) {
+        long now = getTimestampNow();
         toolDispenser.launcherFood(pinDispenserMotor, cfg.getDurationNextEat());
-        cfg.setTimestampNextEat(getTimestampNow() + 600); // Se suma 10 minutos
+        cfg.setTimestampNextEat(now + 20); // Se suman 20 segundos
+        jsonOutput["lastEatTime"] = now;
         cfg.setReceivedMQTT(true);
       } else if (timeToEat <= 10) {
         // Condición para 10 segundos
         delay((timeToEat * 1000) - 2500);
-      } else
+      } else {
+        String payload;
+        if (swBattery) jsonOutput["battery"] = batteryLevel/count;
+        if (!jsonOutput.isNull()) {
+          serializeJson(jsonOutput, payload);
+          toolMQTT.publish("set", payload);
+        }
         toolDispenser.launchSleepMode(timeToEat);
+      }
     }
 
     if (count++ > 10) ESP.restart();
