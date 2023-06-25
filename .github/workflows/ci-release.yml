@@ -29,7 +29,7 @@ jobs:
         name: Get new release version
         run: |
           arrIN=(${version//./ })
-          echo $arrIN
+          echo ${arrIN[1]}
           echo "releaseVersion=0.1.0" >> $GITHUB_ENV
 
       - if: github.event.inputs.releaseType == 'fix'
